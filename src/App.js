@@ -4,14 +4,17 @@ import {AppBar, Box, ButtonGroup, FormControl, Grid, IconButton, InputLabel, Men
 import Highlight from 'react-highlight'
 import "../node_modules/highlight.js/styles/atom-one-dark.css";
 import { toPng, toSvg } from 'html-to-image';
+import 'material-icons/iconfont/material-icons.css';
 
-const paddingSize = [
-  <Button key="one">20</Button>,
-  <Button key="two">40</Button>,
-  <Button key="three">60</Button>,
+const languages = [
+  <MenuItem value="language-javascript">Javascript</MenuItem>,
+  <MenuItem value="language-php">PHP</MenuItem>,
+  <MenuItem value="language-css">CSS</MenuItem>,
 ];
 
 const App = () => {
+  const [language, setLanguage] = useState('language-php');
+  const [icon, setIcon] = useState('');
   const [code, setCode] = useState('');
   const [beforeCodeText, setBeforeCodeText] = useState('');
   const [afterCodeText, setAfterCodeText] = useState('');
@@ -45,6 +48,10 @@ const App = () => {
         if (tag === 'code') {
           bfText = false;
           allCode += textSplit[1].trimEnd()+'\n';
+        }
+
+        if (tag === 'icon') {
+          setIcon(textSplit[1].trimEnd());
         }
 
         if(bfText){
@@ -104,13 +111,8 @@ const App = () => {
 
 
   return (
-    <Grid container 
-      spacing={2}
-      direction="row"
-      justifyContent="center"
-      alignItems="center" 
-    >
-      <AppBar position="static" sx={{ bgcolor: "#fff" }}>
+    <>
+    <AppBar position="static" sx={{ bgcolor: "#fff" }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <img src="https://avatars.githubusercontent.com/u/37701908?s=400&u=769b3ec1ff8bcf66dbfaf207e6876dfd85ef4aa0&v=4" width='30px' alt="logo" />
@@ -119,11 +121,19 @@ const App = () => {
             Programerat
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
+          <Box>
+            <Select 
+              value={language}
+              label='Language'
+              onChange={(event) => {setLanguage(event.target.value)}}
+
+            >
+              {languages}
+            </Select>
+          </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
             <Select
-              labelId="backgroundColor"
-              id="selectBgColor"
               value={background}
               label="Background"
               onChange={handleChange}
@@ -134,7 +144,7 @@ const App = () => {
               <MenuItem className='fourth' value={'fourth'}>Fourth</MenuItem>
               <MenuItem className='fifth' value={'fifth'}>Fifth</MenuItem>
               <MenuItem className='sixth' value={'sixth'}>Sixth</MenuItem>
-              <MenuItem className='seven' value={'seven'}>Sixth</MenuItem>
+              <MenuItem className='seven' value={'seven'}>Seventh</MenuItem>
             </Select>
             </FormControl>
           </Box>
@@ -144,6 +154,12 @@ const App = () => {
             </ButtonGroup>
         </Toolbar>
       </AppBar>
+    <Grid container 
+      spacing={2}
+      direction="row"
+      justifyContent="center"
+      alignItems="center" 
+    >
       <Grid item xs={2} md={3}>
       </Grid>
       <Grid 
@@ -156,7 +172,12 @@ const App = () => {
             dangerouslySetInnerHTML={{
               __html: beforeCodeText
             }}></div>
-          { code && <Highlight className="php code">{code}</Highlight> }
+          <div
+            className='icon'
+            dangerouslySetInnerHTML={{
+              __html: icon && '<span class="representing-icon material-icons">'+icon+'</span>'
+            }}></div>
+          { code && <Highlight className={language + ' code'}>{code}</Highlight> }
           <div
             dangerouslySetInnerHTML={{
               __html: afterCodeText
@@ -178,6 +199,7 @@ const App = () => {
       <Grid item xs={2} md={3}>
       </Grid>
     </Grid>
+    </>
   );
 }
 

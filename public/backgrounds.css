@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+
+
 * {
     font-family: 'Roboto';
 }
@@ -55,4 +57,15 @@
     resize: both;
     margin: 0px;
     padding: 3%;
+}
+
+.icon {
+    text-align: center;
+}
+
+.representing-icon {
+    text-align: center;
+    font-size: 100px !important;
+    color: rgba(1,1,1,0.75);
+    align-self: center;
 }
