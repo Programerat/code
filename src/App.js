@@ -129,6 +129,13 @@ const App = () => {
               onChange={handleChange}
             >
               <MenuItem className='first' value={'first'}>Primary</MenuItem>
+              <MenuItem className='warm-flame' value={'warm-flame'}>Warm Flame 🔥</MenuItem>
+              <MenuItem className='heavy-rain' value={'heavy-rain'}>Heavy Rain 🌧️</MenuItem>
+              <MenuItem className='happy-fisher' value={'happy-fisher'}>Happy Fisher</MenuItem>
+              <MenuItem className='clean-mirror' value={'clean-mirror'}>Clean Mirror 🪞</MenuItem>
+              <MenuItem className='premium-dark' value={'premium-dark'}>Premium Dark 🌑</MenuItem>
+              <MenuItem className='healthy-water' value={'healthy-water'}>Healthy water 🌊</MenuItem>
+
               <MenuItem className='second' value={'second'}>Secondary</MenuItem>
               <MenuItem className='third' value={'third'}>Third</MenuItem>
               <MenuItem className='fourth' value={'fourth'}>Fourth</MenuItem>
