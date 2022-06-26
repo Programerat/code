@@ -181,9 +181,9 @@ const App = () => {
             }}></div>
           <div
             className='icon'
-            dangerouslySetInnerHTML={{
-              __html: icon && '<span class="representing-icon material-icons">'+icon+'</span>'
-            }}></div>
+            >
+              { icon && <span class="representing-icon material-icons">{icon}</span> }
+            </div>
           { code && <Highlight className={language + ' code'}>{code}</Highlight> }
           <div
             dangerouslySetInnerHTML={{
