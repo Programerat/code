@@ -12,8 +12,7 @@
     overflow: hidden;
     font-size: 20px;
     line-height: 1.4;
-    background: rgba(1,1,1,0.75) !important;
-    backdrop-filter: blur(7px);
+    background: rgba(1,1,1, 0.9) !important;
 }
 
 .warm-flame {
