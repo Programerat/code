@@ -37,9 +37,12 @@ const App = () => {
     let bfText = true;
 
     texts.forEach(text => {
+      if (text === '') {
+        return;
+      }
       let textSplit = text.split(':');
 
-      if(textSplit.length === 1){
+      if(textSplit.length === 1 || textSplit.length > 2){
         allCode += text.trimEnd()+'\n';
       }
 
