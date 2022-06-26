@@ -33,7 +33,6 @@ const App = () => {
     let afterText = '';
     let texts = content.split(/\n/gm);
 
-    console.log(texts);
     let bfText = true;
 
     texts.forEach(text => {
@@ -108,7 +107,7 @@ const App = () => {
         link.click()
       })
       .catch((err) => {
-        console.log(err)
+
       })
   }, [ref]);
 
