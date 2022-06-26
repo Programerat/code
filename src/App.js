@@ -5,6 +5,7 @@ import Highlight from 'react-highlight'
 import "../node_modules/highlight.js/styles/atom-one-dark.css";
 import { toPng, toSvg } from 'html-to-image';
 import 'material-icons/iconfont/material-icons.css';
+import DocsCard from './DocumentationCard';
 
 const languages = [
   <MenuItem value="language-javascript">Javascript</MenuItem>,
@@ -128,19 +129,17 @@ const App = () => {
               value={language}
               label='Language'
               onChange={(event) => {setLanguage(event.target.value)}}
-
             >
               {languages}
             </Select>
           </Box>
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, margin: '0px 5px' }}>
             <Select
               value={background}
               label="Background"
               onChange={handleChange}
             >
-              <MenuItem className='first' value={'first'}>Primary</MenuItem>
+              <MenuItem className='first' value={'first'}>Default 🎨</MenuItem>
               <MenuItem className='warm-flame' value={'warm-flame'}>Warm Flame 🔥</MenuItem>
               <MenuItem className='heavy-rain' value={'heavy-rain'}>Heavy Rain 🌧️</MenuItem>
               <MenuItem className='happy-fisher' value={'happy-fisher'}>Happy Fisher</MenuItem>
@@ -155,7 +154,6 @@ const App = () => {
               <MenuItem className='sixth' value={'sixth'}>Sixth</MenuItem>
               <MenuItem className='seven' value={'seven'}>Seventh</MenuItem>
             </Select>
-            </FormControl>
           </Box>
           <ButtonGroup variant="outlined" aria-label="outlined button group">
               <Button onClick={savePngImage}>Png</Button>
@@ -170,11 +168,12 @@ const App = () => {
       alignItems="center" 
     >
       <Grid item xs={2} md={3}>
+        <DocsCard />
       </Grid>
       <Grid 
         item 
-        xs={8} 
-        md={6}
+        xs={10} 
+        md={9}
         >
           <div ref={ref} className={background + ' small'} height="100%">
           <div
@@ -204,8 +203,6 @@ const App = () => {
               style={{ width: 500 }}
             />
           </Box>
-      </Grid>
-      <Grid item xs={2} md={3}>
       </Grid>
     </Grid>
     </>
