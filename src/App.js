@@ -1,25 +1,31 @@
-import {React, useState, useCallback, useRef, createRef} from 'react';
+import {React, useState, useCallback, useRef, createRef, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import {AppBar, Box, ButtonGroup, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, TextareaAutosize, TextField, Toolbar, Typography } from '@mui/material';
-import Highlight from 'react-highlight'
-import "../node_modules/highlight.js/styles/atom-one-dark.css";
+import "../node_modules/highlight.js/styles/tomorrow-night-bright.css";
 import { toPng, toSvg } from 'html-to-image';
 import 'material-icons/iconfont/material-icons.css';
 import DocsCard from './DocumentationCard';
+import Code from './Highlighter';
 
 const languages = [
-  <MenuItem value="language-javascript">Javascript</MenuItem>,
-  <MenuItem value="language-php">PHP</MenuItem>,
-  <MenuItem value="language-css">CSS</MenuItem>,
+  <MenuItem value="javascript">Javascript</MenuItem>,
+  <MenuItem value="php">PHP</MenuItem>,
+  <MenuItem value="css">CSS</MenuItem>,
+  <MenuItem value="bash">BASH</MenuItem>,
+  <MenuItem value="markdown">MD</MenuItem>,
 ];
 
+
+const fileName = Math.random().toString(36).substr(2, 9);
+
+
 const App = () => {
-  const [language, setLanguage] = useState('language-php');
+  const [content, setContent] = useState('');
+  const [language, setLanguage] = useState('php');
   const [icon, setIcon] = useState('');
   const [code, setCode] = useState('');
   const [beforeCodeText, setBeforeCodeText] = useState('');
   const [afterCodeText, setAfterCodeText] = useState('');
-
   const [background, setBackground] = useState('first');
 
   const ref = createRef();
@@ -28,10 +34,23 @@ const App = () => {
     setBackground(event.target.value);
   };
 
-  const updateResult = (content) => {
+  const textAlign = (position) => {
+    let result = document.getElementsByClassName('small');
+    result[0].style.textAlign = position;
+  }
+
+  useEffect(() => {
+    updateResult();
+  }, [content]);
+
+
+
+  const updateResult = () => {
     let beforeText = '';
     let allCode = '';
     let afterText = '';
+    let codeStarted = false;
+    
     let texts = content.split(/\n/gm);
 
     let bfText = true;
@@ -40,21 +59,26 @@ const App = () => {
       if (text === '') {
         return;
       }
-      let textSplit = text.split(':');
 
-      if(textSplit.length === 1 || textSplit.length > 2){
-        allCode += text.trimEnd()+'\n';
+      if (text.includes('```')) {
+        codeStarted = !codeStarted;
+        bfText = false;
+        return;
       }
+
+      if (codeStarted) {
+        allCode += text + '\n';
+        return;
+      }
+      
+      let textSplit = text.split(':');
 
       if (textSplit.length === 2) {
         let tag = textSplit[0].trim();
-        if (tag === 'code') {
-          bfText = false;
-          allCode += textSplit[1].trimEnd()+'\n';
-        }
 
         if (tag === 'icon') {
           setIcon(textSplit[1].trimEnd());
+          return;
         }
 
         if(bfText){
@@ -88,7 +112,7 @@ const App = () => {
     toSvg(ref.current, {})
     .then(function (dataUrl) {
       var link = document.createElement('a');
-      link.download = 'image.svg';
+      link.download = fileName+'.svg';
       link.href = dataUrl;
       link.click();
     }, [ref]);
@@ -103,7 +127,7 @@ const App = () => {
       .then((dataUrl) => {
 
         const link = document.createElement('a')
-        link.download = 'my-image-name.png'
+        link.download = fileName+'.png';
         link.href = dataUrl
         link.click()
       })
@@ -124,6 +148,13 @@ const App = () => {
             Programerat
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
+          <Box style={{margin: '0px 5px'}}>
+            <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
+              <Button onClick={() => textAlign('left')} ><span className='material-icons'>format_align_left</span></Button>
+              <Button onClick={() => textAlign('center')}><span className='material-icons'>format_align_center</span></Button>
+              <Button onClick={() => textAlign('right')}><span className='material-icons'>format_align_right</span></Button>
+            </ButtonGroup>
+          </Box>
           <Box>
             <Select 
               value={language}
@@ -175,21 +206,22 @@ const App = () => {
         xs={10} 
         md={9}
         >
+          <br />
           <div ref={ref} className={background + ' small'} height="100%">
-          <div
-            dangerouslySetInnerHTML={{
-              __html: beforeCodeText
-            }}></div>
-          <div
-            className='icon'
-            >
-              { icon && <span class="representing-icon material-icons">{icon}</span> }
+            <div
+              dangerouslySetInnerHTML={{
+                __html: beforeCodeText
+              }}>
             </div>
-          { code && <Highlight className={language + ' code'}>{code}</Highlight> }
-          <div
-            dangerouslySetInnerHTML={{
-              __html: afterCodeText
-            }}></div>
+            <div className='icon'>
+                { icon && <span class="representing-icon material-icons">{icon}</span> }
+            </div>
+            { code && <Code code={code} language={language} /> }
+            <div
+              dangerouslySetInnerHTML={{
+                __html: afterCodeText
+              }}>
+            </div>
           </div>
           <Box mt={2}>
             <TextField
@@ -197,7 +229,7 @@ const App = () => {
               id="editor"
               label="Your content here..."
               onKeyDown={handleKeyPress}
-              onChange={(e) => {updateResult(e.target.value)}}
+              onChange={(e) => {setContent(e.target.value)}}
               aria-label="Code editor"
               minRows={7}
               placeholder="<?php echo 'code here';"
