@@ -235,7 +235,7 @@ const App = () => {
         md={9}
         >
           <br />
-          <div ref={ref} className={background + ' small'} height="100%">
+          <div ref={ref} className={background + ' small'} style={{width: '445px'}} height="100%">
             <div
               dangerouslySetInnerHTML={{
                 __html: beforeCodeText
