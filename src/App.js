@@ -1,6 +1,6 @@
-import {React, useState, useCallback, useRef, createRef, useEffect} from 'react';
+import {React, useState, useCallback, createRef, useEffect} from 'react';
 import Button from '@mui/material/Button';
-import {AppBar, Box, ButtonGroup, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, TextareaAutosize, TextField, Toolbar, Typography } from '@mui/material';
+import {AppBar, Box, ButtonGroup, Grid, IconButton, MenuItem, Select, TextField, Toolbar, Typography } from '@mui/material';
 import "../node_modules/highlight.js/styles/tomorrow-night-bright.css";
 import { toPng, toSvg } from 'html-to-image';
 import 'material-icons/iconfont/material-icons.css';
@@ -21,7 +21,7 @@ const fileName = Math.random().toString(36).substr(2, 9);
 
 
 const App = () => {
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(undefined);
   const [language, setLanguage] = useState('php');
   const [icon, setIcon] = useState('');
   const [code, setCode] = useState('');
@@ -44,6 +44,14 @@ const App = () => {
     updateResult();
   }, [content]);
 
+  const bringBackContent = () => {
+    console.log(localStorage.getItem('content'));
+    if (localStorage.getItem('content').length > 0) {
+      setContent(localStorage.getItem('content'));
+      document.getElementById('editor').value = localStorage.getItem('content');
+      console.log(content);
+    }
+  }
 
 
   const updateResult = () => {
@@ -51,7 +59,12 @@ const App = () => {
     let allCode = '';
     let afterText = '';
     let codeStarted = false;
-    
+
+    if (content === undefined){
+      return;
+    }    
+
+    localStorage.setItem('content', content);
     let texts = content.split(/\n/gm);
 
     let bfText = true;
@@ -71,21 +84,22 @@ const App = () => {
         allCode += text + '\n';
         return;
       }
-      
-      let textSplit = text.split(':');
 
-      if (textSplit.length === 2) {
-        let tag = textSplit[0].trim();
+      let commaPosition = text.indexOf(':');
+
+      if (commaPosition >= 0) {
+        let tag = text.substring(0, commaPosition);
+        let content = text.substring(commaPosition + 1);
 
         if (tag === 'icon') {
-          setIcon(textSplit[1].trimEnd());
+          setIcon(content.trim());
           return;
         }
 
         if(bfText){
-          beforeText += '<'+tag+'>'+textSplit[1].trim()+'</'+tag+'>';
+          beforeText += '<'+tag+'>'+content.trim()+'</'+tag+'>';
         } else {
-          afterText += '<'+tag+'>'+textSplit[1].trim()+'</'+tag+'>';
+          afterText += '<'+tag+'>'+content.trim()+'</'+tag+'>';
         }
       }
     });
@@ -154,6 +168,7 @@ const App = () => {
               <Button onClick={() => textAlign('left')} ><span className='material-icons'>format_align_left</span></Button>
               <Button onClick={() => textAlign('center')}><span className='material-icons'>format_align_center</span></Button>
               <Button onClick={() => textAlign('right')}><span className='material-icons'>format_align_right</span></Button>
+              <Button onClick={() => bringBackContent()} title="Restore last content"><span className='material-icons'>content_paste</span></Button>
             </ButtonGroup>
           </Box>
           <Box>
@@ -179,6 +194,7 @@ const App = () => {
               <MenuItem className='premium-dark' value={'premium-dark'}>Premium Dark 🌑</MenuItem>
               <MenuItem className='healthy-water' value={'healthy-water'}>Healthy water 🌊</MenuItem>
               <MenuItem className='sun-warm' value={'sun-warm'}>Sun Warm 🔆</MenuItem>
+              <MenuItem className='material-dark' value={'material-dark'}>Material Dark</MenuItem>
 
               <MenuItem className='second' value={'second'}>Secondary</MenuItem>
               <MenuItem className='third' value={'third'}>Third</MenuItem>
@@ -191,7 +207,7 @@ const App = () => {
           <ButtonGroup variant="outlined" aria-label="outlined button group">
               <Button onClick={savePngImage}>Png</Button>
               <Button onClick={saveSvgImage}>Svg</Button>
-            </ButtonGroup>
+          </ButtonGroup>
         </Toolbar>
       </AppBar>
     <Grid container 

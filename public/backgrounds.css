@@ -44,6 +44,11 @@
     color: #fff;
 }
 
+.material-dark {
+    background-color: #24272c;
+    color: #fff;
+}
+
 .premium-dark {
     background-color: #434343;
     background-image: linear-gradient(43deg, #434343 0%, #000000 100%);
