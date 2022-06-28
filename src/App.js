@@ -5,7 +5,7 @@ import "../node_modules/highlight.js/styles/tomorrow-night-bright.css";
 import { toPng, toSvg } from 'html-to-image';
 import 'material-icons/iconfont/material-icons.css';
 import DocsCard from './DocumentationCard';
-import Code from './Highlighter';
+import Code, { codeThemes } from './Highlighter';
 
 const languages = [
   <MenuItem value="javascript">Javascript</MenuItem>,
@@ -21,6 +21,7 @@ const fileName = Math.random().toString(36).substr(2, 9);
 
 
 const App = () => {
+  const [theme, setTheme] = useState('ad');
   const [content, setContent] = useState(undefined);
   const [language, setLanguage] = useState('php');
   const [icon, setIcon] = useState('');
@@ -173,6 +174,15 @@ const App = () => {
           </Box>
           <Box>
             <Select 
+              value={theme}
+              label='Language'
+              onChange={(event) => {setTheme(event.target.value)}}
+            >
+              {codeThemes}
+            </Select>
+          </Box>
+          <Box>
+            <Select 
               value={language}
               label='Language'
               onChange={(event) => {setLanguage(event.target.value)}}
@@ -234,7 +244,7 @@ const App = () => {
             <div className='icon'>
                 { icon && <span class="representing-icon material-icons">{icon}</span> }
             </div>
-            { code && <Code code={code} language={language} /> }
+            { code && <Code code={code} language={language} theme={theme} /> }
             <div
               dangerouslySetInnerHTML={{
                 __html: afterCodeText
