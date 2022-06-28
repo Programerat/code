@@ -27,7 +27,7 @@
 }
 
 .amazon-style {
-    background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/279756/2017_bg.png);
+    background-image: url(./backgrounds/2017_bg.png);
     background-size: cover;
     border-radius: 5px;
     overflow: hidden;
@@ -36,7 +36,7 @@
 
 .meta-curl {
     background-color: #2a2b38;
-    background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg);
+    background-image: url(./backgrounds/pat.svg);
     background-position: bottom center;
     background-repeat: no-repeat;
     background-size: 300%;
@@ -51,7 +51,7 @@
 }
 
 .tailwind { 
-    background-image: url(https://tailwindcss.com/_next/static/media/hero-dark@90.a7a063e8f9d179fbd72b0b735c5797b7.jpg);
+    background-image: url(./backgrounds/hero_dark.jpg);
     background-position: bottom center;
     background-repeat: no-repeat;
     background-size: 300%;
