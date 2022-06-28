@@ -10,6 +10,7 @@ import Code from './Highlighter';
 const languages = [
   <MenuItem value="javascript">Javascript</MenuItem>,
   <MenuItem value="php">PHP</MenuItem>,
+  <MenuItem value="html">HTML</MenuItem>,
   <MenuItem value="css">CSS</MenuItem>,
   <MenuItem value="bash">BASH</MenuItem>,
   <MenuItem value="markdown">MD</MenuItem>,
@@ -177,6 +178,7 @@ const App = () => {
               <MenuItem className='clean-mirror' value={'clean-mirror'}>Clean Mirror 🪞</MenuItem>
               <MenuItem className='premium-dark' value={'premium-dark'}>Premium Dark 🌑</MenuItem>
               <MenuItem className='healthy-water' value={'healthy-water'}>Healthy water 🌊</MenuItem>
+              <MenuItem className='sun-warm' value={'sun-warm'}>Sun Warm 🔆</MenuItem>
 
               <MenuItem className='second' value={'second'}>Secondary</MenuItem>
               <MenuItem className='third' value={'third'}>Third</MenuItem>
