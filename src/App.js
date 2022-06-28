@@ -6,9 +6,11 @@ import { toPng, toSvg } from 'html-to-image';
 import 'material-icons/iconfont/material-icons.css';
 import DocsCard from './DocumentationCard';
 import Code, { codeThemes } from './Highlighter';
+import PreviewCard from './PreviewCard';
 
 const languages = [
   <MenuItem value="javascript">Javascript</MenuItem>,
+  <MenuItem value="go">GO</MenuItem>,
   <MenuItem value="php">PHP</MenuItem>,
   <MenuItem value="html">HTML</MenuItem>,
   <MenuItem value="css">CSS</MenuItem>,
@@ -25,6 +27,7 @@ const App = () => {
   const [content, setContent] = useState(undefined);
   const [language, setLanguage] = useState('php');
   const [icon, setIcon] = useState('');
+  const [logo, setLogo] = useState('');
   const [code, setCode] = useState('');
   const [beforeCodeText, setBeforeCodeText] = useState('');
   const [afterCodeText, setAfterCodeText] = useState('');
@@ -45,15 +48,25 @@ const App = () => {
     updateResult();
   }, [content]);
 
-  const bringBackContent = () => {
-    console.log(localStorage.getItem('content'));
-    if (localStorage.getItem('content').length > 0) {
-      setContent(localStorage.getItem('content'));
-      document.getElementById('editor').value = localStorage.getItem('content');
-      console.log(content);
+  const bringBackContent = (item = 'content') => {
+    console.log(localStorage.getItem(item));
+    if (localStorage.getItem(item).length > 0) {
+      setContent(localStorage.getItem(item));
+      document.getElementById('editor').value = localStorage.getItem(item);
     }
   }
 
+  const generateHtml = (tag, content) => {
+    let dotPosition = tag.indexOf('.');
+    
+    if (dotPosition >= 0) {
+      let tagName = tag.substring(0, dotPosition);
+      let className = tag.substring(dotPosition + 1);
+      return '<'+ tagName + ' class="' + className + '">' + content + '</' + tagName + '>';
+    }
+
+    return '<'+ tag + '>' + content + '</' + tag + '>';
+  }
 
   const updateResult = () => {
     let beforeText = '';
@@ -97,10 +110,15 @@ const App = () => {
           return;
         }
 
+        if (tag === 'img') {
+          setLogo(content.trim());
+          return;
+        }
+
         if(bfText){
-          beforeText += '<'+tag+'>'+content.trim()+'</'+tag+'>';
+          beforeText += generateHtml(tag, content);
         } else {
-          afterText += '<'+tag+'>'+content.trim()+'</'+tag+'>';
+          afterText += generateHtml(tag, content);
         }
       }
     });
@@ -210,8 +228,9 @@ const App = () => {
               <MenuItem className='third' value={'third'}>Third</MenuItem>
               <MenuItem className='fourth' value={'fourth'}>Fourth</MenuItem>
               <MenuItem className='fifth' value={'fifth'}>Fifth</MenuItem>
-              <MenuItem className='sixth' value={'sixth'}>Sixth</MenuItem>
-              <MenuItem className='seven' value={'seven'}>Seventh</MenuItem>
+              <MenuItem className='amazon-style' value={'amazon-style'}>Amazon Style</MenuItem>
+              <MenuItem className='meta-curl' value={'meta-curl'}>Meta Curl</MenuItem>
+              <MenuItem className='tailwind' value={'tailwind'}>Tail wind</MenuItem>
             </Select>
           </Box>
           <ButtonGroup variant="outlined" aria-label="outlined button group">
@@ -236,20 +255,8 @@ const App = () => {
         >
           <br />
           <div ref={ref} className={background + ' small'} style={{width: '445px'}} height="100%">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: beforeCodeText
-              }}>
-            </div>
-            <div className='icon'>
-                { icon && <span class="representing-icon material-icons">{icon}</span> }
-            </div>
-            { code && <Code code={code} language={language} theme={theme} /> }
-            <div
-              dangerouslySetInnerHTML={{
-                __html: afterCodeText
-              }}>
-            </div>
+            { logo && <img src={logo} className='tr' alt="logo" /> }
+            <PreviewCard beforeCodeText={beforeCodeText} afterCodeText={afterCodeText} code={code} icon={icon} language={language} theme={theme} />
           </div>
           <Box mt={2}>
             <TextField

@@ -40,6 +40,7 @@ export default function DocsCard() {
                     <li>h1,h2,h3,h4,h5,h6</li>
                     <li>p</li>
                     <li>icon</li>
+                    <li>div.class</li>
                 </ul>
                 
                 <h4>Example, try writing the following:</h4>
@@ -52,7 +53,8 @@ export default function DocsCard() {
                     ```<br />
                     {"<?php echo 'code here '; ?>"}<br />
                     ```<br />
-                    icon:code
+                    icon:code <br />
+                    div.white card: Super content
                 </pre>
                 <br />
                 All the icons you can use from the <a href="https://fonts.google.com/icons">Material fonts</a>.
