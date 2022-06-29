@@ -176,7 +176,7 @@ const App = () => {
     <AppBar position="static" sx={{ bgcolor: "#fff" }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <img src="https://avatars.githubusercontent.com/u/37701908?s=400&u=769b3ec1ff8bcf66dbfaf207e6876dfd85ef4aa0&v=4" width='30px' alt="logo" />
+            <img src="http://localhost:3000/logo.png" width='50px' alt="logo" />
           </IconButton>
           <Typography variant="h6" color="inherit" component="div">
             Programerat
