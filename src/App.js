@@ -246,7 +246,6 @@ const App = () => {
       alignItems="center" 
     >
       <Grid item xs={2} md={3}>
-        <DocsCard />
       </Grid>
       <Grid 
         item 
