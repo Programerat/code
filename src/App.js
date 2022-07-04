@@ -4,9 +4,9 @@ import {AppBar, Box, ButtonGroup, Grid, IconButton, MenuItem, Select, TextField,
 import "../node_modules/highlight.js/styles/tomorrow-night-bright.css";
 import { toPng, toSvg } from 'html-to-image';
 import 'material-icons/iconfont/material-icons.css';
-import DocsCard from './DocumentationCard';
-import Code, { codeThemes } from './Highlighter';
+import { codeThemes } from './Highlighter';
 import PreviewCard from './PreviewCard';
+import ContentLocalStorage from "./ContentLocalStorage";
 
 const languages = [
   <MenuItem value="javascript">Javascript</MenuItem>,
@@ -17,10 +17,9 @@ const languages = [
   <MenuItem value="bash">BASH</MenuItem>,
   <MenuItem value="markdown">MD</MenuItem>,
 ];
-
+let contentItem = undefined;
 
 const fileName = Math.random().toString(36).substr(2, 9);
-
 
 const App = () => {
   const [theme, setTheme] = useState('ad');
@@ -32,6 +31,9 @@ const App = () => {
   const [beforeCodeText, setBeforeCodeText] = useState('');
   const [afterCodeText, setAfterCodeText] = useState('');
   const [background, setBackground] = useState('first');
+
+  // let editor = document.getElementById('editor');
+  let contentLocalStorage = new ContentLocalStorage();
 
   const ref = createRef();
 
@@ -49,8 +51,8 @@ const App = () => {
   }, [content]);
 
   const bringBackContent = (item = 'content') => {
-    console.log(localStorage.getItem(item));
-    if (localStorage.getItem(item).length > 0) {
+
+    if (localStorage.getItem(item) && localStorage.getItem(item).length > 0) {
       setContent(localStorage.getItem(item));
       document.getElementById('editor').value = localStorage.getItem(item);
     }
@@ -110,7 +112,7 @@ const App = () => {
           return;
         }
 
-        if (tag === 'img') {
+        if (tag === 'logo') {
           setLogo(content.trim());
           return;
         }
@@ -128,6 +130,40 @@ const App = () => {
     setAfterCodeText(afterText);
   }
 
+  const getPreviousItemContent = () => {
+    if (contentItem < 0 || contentItem === undefined) {
+      console.log('There is no more content.')
+      return;
+    }
+
+    contentItem--;
+    console.log(contentItem);
+    setContent(contentLocalStorage.get(contentItem));
+    document.getElementById('editor').value = contentLocalStorage.get(contentItem);
+  }
+
+  const getNextItemContent = () => {
+
+    if (contentItem !== undefined && contentItem >= contentLocalStorage.count()){
+      console.log('There is no more content.');
+      return;
+    }
+
+    if (contentItem === undefined) {
+      contentItem = 0;
+    } else {
+      contentItem++;
+    }
+
+    setContent(contentLocalStorage.get(contentItem));
+    document.getElementById('editor').value = contentLocalStorage.get(contentItem);
+    console.log(contentItem);
+  }
+
+  const cleanUpSavedContents = () => {
+    contentLocalStorage.cleanUp();
+  }
+
   const handleKeyPress = (event) => {
     if(event.keyCode === 9){
       //prevent and add 4 spaces
@@ -143,6 +179,7 @@ const App = () => {
       return;
     }
 
+    contentLocalStorage.addNewContent(content);
     toSvg(ref.current, {})
     .then(function (dataUrl) {
       var link = document.createElement('a');
@@ -156,6 +193,8 @@ const App = () => {
     if (ref.current === null) {
       return
     }
+
+    contentLocalStorage.addNewContent(content);
 
     toPng(ref.current, {})
       .then((dataUrl) => {
@@ -187,7 +226,6 @@ const App = () => {
               <Button onClick={() => textAlign('left')} ><span className='material-icons'>format_align_left</span></Button>
               <Button onClick={() => textAlign('center')}><span className='material-icons'>format_align_center</span></Button>
               <Button onClick={() => textAlign('right')}><span className='material-icons'>format_align_right</span></Button>
-              <Button onClick={() => bringBackContent()} title="Restore last content"><span className='material-icons'>content_paste</span></Button>
             </ButtonGroup>
           </Box>
           <Box>
@@ -208,7 +246,7 @@ const App = () => {
               {languages}
             </Select>
           </Box>
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, margin: '0px 5px' }}>
+          <Box sx={{ margin: '0px 5px' }}>
             <Select
               value={background}
               label="Background"
@@ -245,31 +283,43 @@ const App = () => {
       justifyContent="center"
       alignItems="center" 
     >
-      <Grid item xs={2} md={3}>
+      <Grid item xs={6} md={6}>
+        <br />
+        <Box style={{margin: '0px 5px'}}>
+          <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
+            <Button onClick={getPreviousItemContent}><span className='material-icons'>arrow_left</span></Button>
+            <Button onClick={getNextItemContent}><span className='material-icons'>arrow_right</span></Button>
+          </ButtonGroup>
+          <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
+            <Button onClick={cleanUpSavedContents}><span className='material-icons'>cleaning_services</span></Button>
+          </ButtonGroup>
+          <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
+            <Button onClick={bringBackContent}><span className='material-icons'>edit_note</span></Button>
+          </ButtonGroup>
+        </Box>
+        <br />
+        <TextField
+            multiline
+            id="editor"
+            label="Your content here..."
+            onKeyDown={handleKeyPress}
+            onChange={(e) => {setContent(e.target.value)}}
+            aria-label="Code editor"
+            minRows={7}
+            placeholder="<?php echo 'code here';"
+            style={{ width: 500 }}
+        />
       </Grid>
       <Grid 
         item 
-        xs={10} 
-        md={9}
+        xs={6}
+        md={6}
         >
           <br />
           <div ref={ref} className={background + ' small'} style={{width: '445px'}} height="100%">
             { logo && <img src={logo} className='tr' alt="logo" /> }
             <PreviewCard beforeCodeText={beforeCodeText} afterCodeText={afterCodeText} code={code} icon={icon} language={language} theme={theme} />
           </div>
-          <Box mt={2}>
-            <TextField
-              multiline
-              id="editor"
-              label="Your content here..."
-              onKeyDown={handleKeyPress}
-              onChange={(e) => {setContent(e.target.value)}}
-              aria-label="Code editor"
-              minRows={7}
-              placeholder="<?php echo 'code here';"
-              style={{ width: 500 }}
-            />
-          </Box>
       </Grid>
     </Grid>
     </>

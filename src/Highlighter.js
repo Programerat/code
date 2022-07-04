@@ -3,7 +3,6 @@ import ml from 'react-syntax-highlighter/dist/esm/styles/prism/material-light';
 import md from 'react-syntax-highlighter/dist/esm/styles/prism/material-dark';
 import ad from 'react-syntax-highlighter/dist/esm/styles/prism/atom-dark';
 import { MenuItem } from '@mui/material';
-import { useState } from 'react';
 
 export const codeThemes = [
   <MenuItem value='ml'>Material light</MenuItem>,
