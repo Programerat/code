@@ -8,6 +8,8 @@ class TextCompiler {
         "h4": "<h4>{__content__}</h4>",
         "h5": "<h5>{__content__}</h5>",
         "p": "<p>{__content__}</p>",
+        "li": "<li>{__content__}</li>",
+        ">": "<quote>{__content__}</quote>",
         "card": "<div class='card white'>{__content__}</div>",
         "logo": "<img src={__content__} className='tr' alt='logo' />",
 
