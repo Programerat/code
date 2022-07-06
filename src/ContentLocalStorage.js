@@ -2,6 +2,7 @@
 class ContentLocalStorage {
     storageKey = 'content_local_storage';
     savedContents = [];
+    activeContent = 0;
 
     constructor() {
         if (localStorage.getItem(this.storageKey) === null) {
@@ -9,6 +10,7 @@ class ContentLocalStorage {
         }
 
         this.savedContents = JSON.parse(localStorage.getItem(this.storageKey));
+        this.activeContent = this.savedContents.length;
     }
 
     addNewContent(content) {
@@ -18,6 +20,28 @@ class ContentLocalStorage {
 
     get(item) {
         return this.savedContents[item];
+    }
+
+    getCurrentItem() {
+        return this.savedContents[this.activeContent];
+    }
+
+    getPreviousContent() {
+        if (this.activeContent === 0) {
+            return this.getCurrentItem();
+        }
+
+        this.activeContent --;
+        return this.getCurrentItem();
+    }
+
+    getNextContent() {
+        if (this.activeContent === this.savedContents.length) {
+            return this.getCurrentItem();
+        }
+
+        this.activeContent ++;
+        return this.getCurrentItem();
     }
 
     count() {

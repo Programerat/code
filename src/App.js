@@ -7,6 +7,8 @@ import 'material-icons/iconfont/material-icons.css';
 import { codeThemes } from './Highlighter';
 import PreviewCard from './PreviewCard';
 import ContentLocalStorage from "./ContentLocalStorage";
+import Content from "./Content";
+import TextCompiler from "./TextCompiler";
 
 const languages = [
   <MenuItem value="javascript">Javascript</MenuItem>,
@@ -17,147 +19,50 @@ const languages = [
   <MenuItem value="bash">BASH</MenuItem>,
   <MenuItem value="markdown">MD</MenuItem>,
 ];
-let contentItem = undefined;
-
 const fileName = Math.random().toString(36).substr(2, 9);
+let contentLocalStorage = new ContentLocalStorage();
+let compiler = new TextCompiler();
 
 const App = () => {
   const [theme, setTheme] = useState('ad');
   const [content, setContent] = useState(undefined);
   const [language, setLanguage] = useState('php');
-  const [icon, setIcon] = useState('');
-  const [logo, setLogo] = useState('');
   const [code, setCode] = useState('');
-  const [beforeCodeText, setBeforeCodeText] = useState('');
-  const [afterCodeText, setAfterCodeText] = useState('');
+  const [writtenContent, setWrittenContent] = useState('');
   const [background, setBackground] = useState('first');
-
-  // let editor = document.getElementById('editor');
-  let contentLocalStorage = new ContentLocalStorage();
-
+  let textContent = new Content([]);
   const ref = createRef();
 
   const handleChange = (event) => {
     setBackground(event.target.value);
   };
 
-  const textAlign = (position) => {
-    let result = document.getElementsByClassName('small');
-    result[0].style.textAlign = position;
-  }
-
   useEffect(() => {
-    updateResult();
+    textContent = updateContent(content);
+    textContent && updateView(textContent);
   }, [content]);
 
-  const bringBackContent = (item = 'content') => {
-
-    if (localStorage.getItem(item) && localStorage.getItem(item).length > 0) {
-      setContent(localStorage.getItem(item));
-      document.getElementById('editor').value = localStorage.getItem(item);
-    }
-  }
-
-  const generateHtml = (tag, content) => {
-    let dotPosition = tag.indexOf('.');
-    
-    if (dotPosition >= 0) {
-      let tagName = tag.substring(0, dotPosition);
-      let className = tag.substring(dotPosition + 1);
-      return '<'+ tagName + ' class="' + className + '">' + content + '</' + tagName + '>';
-    }
-
-    return '<'+ tag + '>' + content + '</' + tag + '>';
-  }
-
-  const updateResult = () => {
-    let beforeText = '';
-    let allCode = '';
-    let afterText = '';
-    let codeStarted = false;
-
-    if (content === undefined){
+  const updateContent = (c) => {
+    if (c === undefined){
       return;
-    }    
+    }
 
-    localStorage.setItem('content', content);
-    let texts = content.split(/\n/gm);
+    return new Content(c.split(/\n/gm));
+  }
 
-    let bfText = true;
-
-    texts.forEach(text => {
-      if (text === '') {
-        return;
-      }
-
-      if (text.includes('```')) {
-        codeStarted = !codeStarted;
-        bfText = false;
-        return;
-      }
-
-      if (codeStarted) {
-        allCode += text + '\n';
-        return;
-      }
-
-      let commaPosition = text.indexOf(':');
-
-      if (commaPosition >= 0) {
-        let tag = text.substring(0, commaPosition);
-        let content = text.substring(commaPosition + 1);
-
-        if (tag === 'icon') {
-          setIcon(content.trim());
-          return;
-        }
-
-        if (tag === 'logo') {
-          setLogo(content.trim());
-          return;
-        }
-
-        if(bfText){
-          beforeText += generateHtml(tag, content);
-        } else {
-          afterText += generateHtml(tag, content);
-        }
-      }
-    });
-
-    setCode(allCode);
-    setBeforeCodeText(beforeText);
-    setAfterCodeText(afterText);
+  const updateView = (content) => {
+    setWrittenContent(compiler.compile(content.rawContent));
+    setCode(compiler.getCode());
   }
 
   const getPreviousItemContent = () => {
-    if (contentItem < 0 || contentItem === undefined) {
-      console.log('There is no more content.')
-      return;
-    }
-
-    contentItem--;
-    console.log(contentItem);
-    setContent(contentLocalStorage.get(contentItem));
-    document.getElementById('editor').value = contentLocalStorage.get(contentItem);
+    textContent = contentLocalStorage.getPreviousContent();
+    updateView(textContent);
   }
 
   const getNextItemContent = () => {
-
-    if (contentItem !== undefined && contentItem >= contentLocalStorage.count()){
-      console.log('There is no more content.');
-      return;
-    }
-
-    if (contentItem === undefined) {
-      contentItem = 0;
-    } else {
-      contentItem++;
-    }
-
-    setContent(contentLocalStorage.get(contentItem));
-    document.getElementById('editor').value = contentLocalStorage.get(contentItem);
-    console.log(contentItem);
+    textContent = contentLocalStorage.getNextContent();
+    updateView(textContent);
   }
 
   const cleanUpSavedContents = () => {
@@ -179,7 +84,7 @@ const App = () => {
       return;
     }
 
-    contentLocalStorage.addNewContent(content);
+    contentLocalStorage.addNewContent(textContent.toJson());
     toSvg(ref.current, {})
     .then(function (dataUrl) {
       var link = document.createElement('a');
@@ -194,7 +99,7 @@ const App = () => {
       return
     }
 
-    contentLocalStorage.addNewContent(content);
+    contentLocalStorage.addNewContent(textContent.toJson());
 
     toPng(ref.current, {})
       .then((dataUrl) => {
@@ -221,13 +126,6 @@ const App = () => {
             Programerat
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Box style={{margin: '0px 5px'}}>
-            <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
-              <Button onClick={() => textAlign('left')} ><span className='material-icons'>format_align_left</span></Button>
-              <Button onClick={() => textAlign('center')}><span className='material-icons'>format_align_center</span></Button>
-              <Button onClick={() => textAlign('right')}><span className='material-icons'>format_align_right</span></Button>
-            </ButtonGroup>
-          </Box>
           <Box>
             <Select 
               value={theme}
@@ -294,7 +192,7 @@ const App = () => {
             <Button onClick={cleanUpSavedContents}><span className='material-icons'>cleaning_services</span></Button>
           </ButtonGroup>
           <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
-            <Button onClick={bringBackContent}><span className='material-icons'>edit_note</span></Button>
+            <Button><span className='material-icons'>edit_note</span></Button>
           </ButtonGroup>
         </Box>
         <br />
@@ -317,8 +215,7 @@ const App = () => {
         >
           <br />
           <div ref={ref} className={background + ' small'} style={{width: '445px'}} height="100%">
-            { logo && <img src={logo} className='tr' alt="logo" /> }
-            <PreviewCard beforeCodeText={beforeCodeText} afterCodeText={afterCodeText} code={code} icon={icon} language={language} theme={theme} />
+            <PreviewCard content={writtenContent} code={code} language={language} theme={theme} />
           </div>
       </Grid>
     </Grid>
