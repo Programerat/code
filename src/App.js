@@ -30,7 +30,7 @@ const App = () => {
   const [code, setCode] = useState('');
   const [writtenContent, setWrittenContent] = useState('');
   const [background, setBackground] = useState('first');
-  let textContent = new Content([]);
+  const [textContent, setTextContent] = useState('');
   const ref = createRef();
 
   const handleChange = (event) => {
@@ -38,16 +38,19 @@ const App = () => {
   };
 
   useEffect(() => {
-    textContent = updateContent(content);
-    textContent && updateView(textContent);
+    updateContent(content);
   }, [content]);
+
+  useEffect(() => {
+    updateView(textContent);
+  }, [textContent]);
 
   const updateContent = (c) => {
     if (c === undefined){
       return;
     }
 
-    return new Content(c.split(/\n/gm));
+    setTextContent(new Content(c.split(/\n/gm)));
   }
 
   const updateView = (content) => {
@@ -56,13 +59,11 @@ const App = () => {
   }
 
   const getPreviousItemContent = () => {
-    textContent = contentLocalStorage.getPreviousContent();
-    updateView(textContent);
+    updateView(contentLocalStorage.getPreviousContent());
   }
 
   const getNextItemContent = () => {
-    textContent = contentLocalStorage.getNextContent();
-    updateView(textContent);
+    updateView(contentLocalStorage.getNextContent());
   }
 
   const cleanUpSavedContents = () => {
@@ -99,6 +100,7 @@ const App = () => {
       return
     }
 
+    console.log(textContent, textContent.toJson());
     contentLocalStorage.addNewContent(textContent.toJson());
 
     toPng(ref.current, {})

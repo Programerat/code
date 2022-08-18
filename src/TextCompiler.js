@@ -20,7 +20,7 @@ class TextCompiler {
     codeBlockContent = '';
     content = [];
 
-    compile(rows) {
+    compile(rows = []) {
         //reset
         this.content = [];
         this.codeBlockContent = '';
