@@ -250,6 +250,14 @@ const App = () => {
                   </div>
               </Grid>
           </Grid>
+          <Grid container spacing={2}
+              direction="row"
+              justifyContent="center"
+              alignItems="center"  >
+              <h1>
+                  Generate Badge 
+              </h1>
+          </Grid>
           <Grid container 
               spacing={2}
               direction="row"
@@ -268,8 +276,8 @@ const App = () => {
                     <span className="focus-bg"></span>
             </label>
             <br />
-            
             </Grid>
+              
             <Grid item xs={6} md={3}>
                 <div ref={badgeRef} style={{width: '200px'}} height="100%" >
                     <PreviewBadge title={title} icon={'OOP'} />

@@ -15,8 +15,9 @@ code {
 .title {
     width: 100px;
     max-width: 100px;
-    margin: 15px auto;
+    margin: 0px auto;
     overflow-wrap: break-word;
+    text-align: center;
 }
 
 .badge-golden {
@@ -28,11 +29,11 @@ code {
     height: 200px;
     font-weight: bold;
     text-align: center;
-    padding-top: 15%;
+    padding-top: 20%;
     max-width: 200px;
     overflow-wrap: break-word;
     vertical-align: center;
-    font-size: 22px;
+    font-size: 20px;
 }
 
 
