@@ -9,6 +9,7 @@ import PreviewCard from './PreviewCard';
 import ContentLocalStorage from "./ContentLocalStorage";
 import Content from "./Content";
 import TextCompiler from "./TextCompiler";
+import PreviewBadge from "./PreviewBadge";
 
 const languages = [
   <MenuItem value="javascript">Javascript</MenuItem>,
@@ -32,6 +33,8 @@ const App = () => {
   const [background, setBackground] = useState('first');
   const [textContent, setTextContent] = useState('');
   const ref = createRef();
+  const badgeRef = createRef();
+  const [title, setTitle] = useState('');
 
   const handleChange = (event) => {
     setBackground(event.target.value);
@@ -44,6 +47,10 @@ const App = () => {
   useEffect(() => {
     updateView(textContent);
   }, [textContent]);
+  
+  useEffect(() => {
+      updateBadge(title);
+      }, [title]);
 
   const updateContent = (c) => {
     if (c === undefined){
@@ -51,6 +58,9 @@ const App = () => {
     }
 
     setTextContent(new Content(c.split(/\n/gm)));
+  }
+    
+    const updateBadge = (c) => {
   }
 
   const updateView = (content) => {
@@ -79,6 +89,12 @@ const App = () => {
       event.target.value = newText;
     }
   }
+  
+    const handleTitleChange = (event) => {
+      event.preventDefault();
+      setTitle(event.target.value);
+      
+  }
 
   const saveSvgImage = useCallback(() => {
     if (ref.current === null) {
@@ -95,12 +111,25 @@ const App = () => {
     }, [ref]);
   });
 
+  const savePngBadge = useCallback(() => {
+      toPng(badgeRef.current, {})
+      .then((dataUrl) => {
+
+          const link = document.createElement('a')
+          link.download = fileName+'.png';
+          link.href = dataUrl
+          link.click()
+      })
+      .catch((err) => {
+
+      })
+  }, [badgeRef]);
+  
   const savePngImage = useCallback(() => {
     if (ref.current === null) {
       return
     }
-
-    console.log(textContent, textContent.toJson());
+    
     contentLocalStorage.addNewContent(textContent.toJson());
 
     toPng(ref.current, {})
@@ -118,108 +147,139 @@ const App = () => {
 
 
   return (
-    <>
-    <AppBar position="static" sx={{ bgcolor: "#fff" }}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <img src="http://localhost:3000/logo.png" width='50px' alt="logo" />
-          </IconButton>
-          <Typography variant="h6" color="inherit" component="div">
-            Programerat
-          </Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box>
-            <Select 
-              value={theme}
-              label='Language'
-              onChange={(event) => {setTheme(event.target.value)}}
-            >
-              {codeThemes}
-            </Select>
-          </Box>
-          <Box>
-            <Select 
-              value={language}
-              label='Language'
-              onChange={(event) => {setLanguage(event.target.value)}}
-            >
-              {languages}
-            </Select>
-          </Box>
-          <Box sx={{ margin: '0px 5px' }}>
-            <Select
-              value={background}
-              label="Background"
-              onChange={handleChange}
-            >
-              <MenuItem className='first' value={'first'}>Default 🎨</MenuItem>
-              <MenuItem className='warm-flame' value={'warm-flame'}>Warm Flame 🔥</MenuItem>
-              <MenuItem className='heavy-rain' value={'heavy-rain'}>Heavy Rain 🌧️</MenuItem>
-              <MenuItem className='happy-fisher' value={'happy-fisher'}>Happy Fisher</MenuItem>
-              <MenuItem className='clean-mirror' value={'clean-mirror'}>Clean Mirror 🪞</MenuItem>
-              <MenuItem className='premium-dark' value={'premium-dark'}>Premium Dark 🌑</MenuItem>
-              <MenuItem className='healthy-water' value={'healthy-water'}>Healthy water 🌊</MenuItem>
-              <MenuItem className='sun-warm' value={'sun-warm'}>Sun Warm 🔆</MenuItem>
-              <MenuItem className='material-dark' value={'material-dark'}>Material Dark</MenuItem>
+          <>
+          <AppBar position="static" sx={{ bgcolor: "#fff" }}>
+              <Toolbar>
+                  <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                      <img src="http://localhost:3000/logo.png" width='50px' alt="logo" />
+                  </IconButton>
+                  <Typography variant="h6" color="inherit" component="div">
+                      Programerat
+                  </Typography>
+                  <Box sx={{ flexGrow: 1 }} />
+                  <Box>
+                      <Select 
+                          value={theme}
+                          label='Language'
+                          onChange={(event) => {setTheme(event.target.value)}}
+                          >
+                          {codeThemes}
+                      </Select>
+                  </Box>
+                  <Box>
+                      <Select 
+                          value={language}
+                          label='Language'
+                          onChange={(event) => {setLanguage(event.target.value)}}
+                          >
+                          {languages}
+                      </Select>
+                  </Box>
+                  <Box sx={{ margin: '0px 5px' }}>
+                      <Select
+                          value={background}
+                          label="Background"
+                          onChange={handleChange}
+                          >
+                          <MenuItem className='first' value={'first'}>Default 🎨</MenuItem>
+                          <MenuItem className='warm-flame' value={'warm-flame'}>Warm Flame 🔥</MenuItem>
+                          <MenuItem className='heavy-rain' value={'heavy-rain'}>Heavy Rain 🌧️</MenuItem>
+                          <MenuItem className='happy-fisher' value={'happy-fisher'}>Happy Fisher</MenuItem>
+                          <MenuItem className='clean-mirror' value={'clean-mirror'}>Clean Mirror 🪞</MenuItem>
+                          <MenuItem className='premium-dark' value={'premium-dark'}>Premium Dark 🌑</MenuItem>
+                          <MenuItem className='healthy-water' value={'healthy-water'}>Healthy water 🌊</MenuItem>
+                          <MenuItem className='sun-warm' value={'sun-warm'}>Sun Warm 🔆</MenuItem>
+                          <MenuItem className='material-dark' value={'material-dark'}>Material Dark</MenuItem>
 
-              <MenuItem className='second' value={'second'}>Secondary</MenuItem>
-              <MenuItem className='third' value={'third'}>Third</MenuItem>
-              <MenuItem className='fourth' value={'fourth'}>Fourth</MenuItem>
-              <MenuItem className='fifth' value={'fifth'}>Fifth</MenuItem>
-              <MenuItem className='amazon-style' value={'amazon-style'}>Amazon Style</MenuItem>
-              <MenuItem className='meta-curl' value={'meta-curl'}>Meta Curl</MenuItem>
-              <MenuItem className='tailwind' value={'tailwind'}>Tail wind</MenuItem>
-            </Select>
-          </Box>
-          <ButtonGroup variant="outlined" aria-label="outlined button group">
-              <Button onClick={savePngImage}>Png</Button>
-              <Button onClick={saveSvgImage}>Svg</Button>
-          </ButtonGroup>
-        </Toolbar>
-      </AppBar>
-    <Grid container 
-      spacing={2}
-      direction="row"
-      justifyContent="center"
-      alignItems="center" 
-    >
-      <Grid item xs={6} md={6}>
-        <br />
-        <Box style={{margin: '0px 5px'}}>
-          <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
-            <Button onClick={getPreviousItemContent}><span className='material-icons'>arrow_left</span></Button>
-            <Button onClick={getNextItemContent}><span className='material-icons'>arrow_right</span></Button>
-          </ButtonGroup>
-          <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
-            <Button onClick={cleanUpSavedContents}><span className='material-icons'>cleaning_services</span></Button>
-          </ButtonGroup>
-          <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
-            <Button><span className='material-icons'>edit_note</span></Button>
-          </ButtonGroup>
-        </Box>
-        <br />
-        <TextField
-            multiline
-            id="editor"
-            label="Your content here..."
-            onKeyDown={handleKeyPress}
-            onChange={(e) => {setContent(e.target.value)}}
-            aria-label="Code editor"
-            minRows={7}
-            placeholder="<?php echo 'code here';"
-            style={{ width: 500 }}
-        />
-      </Grid>
-      <Grid 
-        item 
-        xs={6}
-        md={6}
-        >
-          <br />
-          <div ref={ref} className={background + ' small'} style={{width: '445px'}} height="100%">
-            <PreviewCard content={writtenContent} code={code} language={language} theme={theme} />
-          </div>
-      </Grid>
+                          <MenuItem className='second' value={'second'}>Secondary</MenuItem>
+                          <MenuItem className='third' value={'third'}>Third</MenuItem>
+                          <MenuItem className='fourth' value={'fourth'}>Fourth</MenuItem>
+                          <MenuItem className='fifth' value={'fifth'}>Fifth</MenuItem>
+                          <MenuItem className='amazon-style' value={'amazon-style'}>Amazon Style</MenuItem>
+                          <MenuItem className='meta-curl' value={'meta-curl'}>Meta Curl</MenuItem>
+                          <MenuItem className='tailwind' value={'tailwind'}>Tail wind</MenuItem>
+                      </Select>
+                  </Box>
+                  <ButtonGroup variant="outlined" aria-label="outlined button group">
+                      <Button onClick={savePngImage}>Png</Button>
+                      <Button onClick={saveSvgImage}>Svg</Button>
+                  </ButtonGroup>
+              </Toolbar>
+          </AppBar>
+          <Grid container 
+              spacing={2}
+              direction="row"
+              justifyContent="center"
+              alignItems="center" 
+              >
+              <Grid item xs={6} md={6}>
+                  <br />
+                  <Box style={{margin: '0px 5px'}}>
+                      <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
+                          <Button onClick={getPreviousItemContent}><span className='material-icons'>arrow_left</span></Button>
+                          <Button onClick={getNextItemContent}><span className='material-icons'>arrow_right</span></Button>
+                      </ButtonGroup>
+                      <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
+                          <Button onClick={cleanUpSavedContents}><span className='material-icons'>cleaning_services</span></Button>
+                      </ButtonGroup>
+                      <ButtonGroup variant="outlined" aria-label="outlined button group" label="Size">
+                          <Button><span className='material-icons'>edit_note</span></Button>
+                      </ButtonGroup>
+                  </Box>
+                  <br />
+                  <TextField
+                      multiline
+                      id="editor"
+                      label="Your content here..."
+                      onKeyDown={handleKeyPress}
+                      onChange={(e) => {setContent(e.target.value)}}
+                      aria-label="Code editor"
+                      minRows={7}
+                      placeholder="<?php echo 'code here';"
+                      style={{ width: 500 }}
+                  />
+              </Grid>
+              <Grid 
+                  item 
+                  xs={6}
+                  md={6}
+                  >
+                  <br />
+                  <div ref={ref} className={background + ' small'} style={{width: '445px'}} height="100%">
+                      <PreviewCard content={writtenContent} code={code} language={language} theme={theme} />
+                  </div>
+              </Grid>
+          </Grid>
+          <Grid container 
+              spacing={2}
+              direction="row"
+              justifyContent="center"
+              alignItems="center" 
+              >
+              <Grid item xs={6} md={3}>
+                  <label htmlFor="inp" className="inp">
+                      <input
+                          type="text"
+                          id="inp"
+                          placeholder="&nbsp;"
+                          onChange={(e) => {setTitle(e.target.value)}}
+                      />
+                    <span className="label">Title</span>
+                    <span className="focus-bg"></span>
+            </label>
+            <br />
+            
+            </Grid>
+            <Grid item xs={6} md={3}>
+                <div ref={badgeRef} style={{width: '200px'}} height="100%" >
+                    <PreviewBadge title={title} icon={'OOP'} />
+                </div>
+            </Grid>
+            <Grid item xs={0} md={2}>
+                <ButtonGroup variant="outlined" aria-label="outlined button group">
+                    <Button onClick={savePngBadge}>Png</Button>
+                </ButtonGroup>
+            </Grid>
     </Grid>
     </>
   );
