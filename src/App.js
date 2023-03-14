@@ -151,7 +151,7 @@ const App = () => {
           <AppBar position="static" sx={{ bgcolor: "#fff" }}>
               <Toolbar>
                   <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-                      <img src="http://localhost:3000/logo.png" width='50px' alt="logo" />
+                      <img src="/logo.png" width='50px' alt="logo" />
                   </IconButton>
                   <Typography variant="h6" color="inherit" component="div">
                       Programerat
@@ -250,45 +250,6 @@ const App = () => {
                   </div>
               </Grid>
           </Grid>
-          <Grid container spacing={2}
-              direction="row"
-              justifyContent="center"
-              alignItems="center"  >
-              <h1>
-                  Generate Badge 
-              </h1>
-          </Grid>
-          <Grid container 
-              spacing={2}
-              direction="row"
-              justifyContent="center"
-              alignItems="center" 
-              >
-              <Grid item xs={6} md={3}>
-                  <label htmlFor="inp" className="inp">
-                      <input
-                          type="text"
-                          id="inp"
-                          placeholder="&nbsp;"
-                          onChange={(e) => {setTitle(e.target.value)}}
-                      />
-                    <span className="label">Title</span>
-                    <span className="focus-bg"></span>
-            </label>
-            <br />
-            </Grid>
-              
-            <Grid item xs={6} md={3}>
-                <div ref={badgeRef} style={{width: '200px'}} height="100%" >
-                    <PreviewBadge title={title} icon={'OOP'} />
-                </div>
-            </Grid>
-            <Grid item xs={0} md={2}>
-                <ButtonGroup variant="outlined" aria-label="outlined button group">
-                    <Button onClick={savePngBadge}>Png</Button>
-                </ButtonGroup>
-            </Grid>
-    </Grid>
     </>
   );
 }
