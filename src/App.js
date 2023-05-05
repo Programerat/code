@@ -13,12 +13,23 @@ const downloadImage = async () => {
     const dataUrl = await toPng(markdownOutput);
     const link = document.createElement('a');
     link.href = dataUrl;
-    link.download = 'preview.png';
+    link.download = `preview-${generateRandomName(10)}.png`;
     link.click();
   } catch (err) {
     console.error('Failed to download the image:', err);
   }
 };
+
+function generateRandomName(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 
 
 function App() {
@@ -101,10 +112,12 @@ function App() {
             <DownloadIcon className="w-4 h-4" />
           </button>
         </div>
-        <div id="markdownOutputContainer" className={`text-white bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 p-4 rounded-lg ${previewWidth}`}>
+        <div id="markdownOutputContainer" className='flex items-center p-5'>
+        <div className={`text-white bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 p-4 shadow-lg rounded-lg ${previewWidth}`}>
           <div
             className={`${alignment} text-white prose dark:prose`} dangerouslySetInnerHTML={{__html: renderContent(content)}}
           ></div>
+        </div>
         </div>
       </div>
 
