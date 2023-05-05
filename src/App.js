@@ -168,7 +168,7 @@ function App() {
         <div id="markdownOutputContainer" className='flex items-center p-5'>
         <div className={`p-4 rounded-lg ${gradient} ${previewWidth}`} >
           <div
-            className={`${alignment} prose dark:prose`} dangerouslySetInnerHTML={{__html: renderContent(content)}}
+            className={`${alignment} text-white prose dark:prose`} dangerouslySetInnerHTML={{__html: renderContent(content)}}
           ></div>
         </div>
         </div>

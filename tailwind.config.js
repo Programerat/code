@@ -32,6 +32,12 @@ module.exports = {
             blackquote: {
               color: theme('colors.white'),
             },
+            p: {
+              color: theme('colors.white'),
+            },
+            strong: {
+              color: theme('colors.white'),
+            },
           },
         },
       }),
