@@ -112,9 +112,8 @@ function App() {
      <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-xl font-bold">Write Your Markdown</h2>
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xl font-bold">Write Your Markdown</h2>
-          <div className="text-sm">
           <select class="mx-1 px-2 py-1 rounded-md bg-gray-200 hover:bg-gray-300" onChange={(e) => setGradient(e.target.value)}>
             <option value="bg-gradient-to-r from-green-400 via-blue-500 to-blue-500">Green to Blue</option>
             <option value="bg-gradient-to-tl from-red-400 via-yellow-500 to-yellow-500">Red to Yellow</option>
@@ -131,7 +130,7 @@ function App() {
             <option value="bg-gradient-to-br from-gray-400 via-gray-500 to-gray-600">Gray</option>
 
           </select>
-
+          <div className="text-sm">
 
             <button className="px-2 py-1 rounded-md bg-gray-200 hover:bg-gray-300 mr-1" onClick={() => setAlignment('text-left')}>
               <ArrowNarrowLeftIcon className="w-4 h-4" />
@@ -166,9 +165,9 @@ function App() {
           </button>
         </div>
         <div id="markdownOutputContainer" className='flex items-center p-5'>
-        <div className={`p-4 rounded-lg ${gradient} ${previewWidth}`} >
+        <div className={`p-4 bg-gray-100 rounded-lg ${gradient} ${previewWidth}`} >
           <div
-            className={`${alignment} text-white prose dark:prose`} dangerouslySetInnerHTML={{__html: renderContent(content)}}
+            className={`${alignment} shadow-lg text-white prose dark:prose`} dangerouslySetInnerHTML={{__html: renderContent(content)}}
           ></div>
         </div>
         </div>
