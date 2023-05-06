@@ -120,14 +120,26 @@ function App() {
             <option value="bg-gradient-to-tr from-indigo-400 via-teal-500 to-teal-500">Indigo to Teal</option>
             <option value="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">Pink to Yellow</option>
             <option value="bg-gradient-to-tr from-purple-400 via-pink-500 to-red-500">Purple to Red</option>
-            <option value="bg-gradient-to-r from-orange-400 via-yellow-500 to-green-500">Orange to Green</option>
-            <option value="bg-gradient-to-t from-purple-400 via-pink-500 to-red-500">Purple to Red (vertical)</option>
-            <option value="bg-gradient-to-br from-red-400 via-orange-500 to-yellow-500">Red to Yellow (diagonal)</option>
-            <option value="bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500">Yellow to Pink</option>
-            <option value="bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">Purple to Red</option>
-            <option value="bg-gradient-to-br from-green-500 via-blue-500 to-purple-500">Green to Purple</option>
-            <option value="bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500">Red to Yellow</option>
-            <option value="bg-gradient-to-br from-gray-400 via-gray-500 to-gray-600">Gray</option>
+            <option value="bg-gradient-to-r from-yellow-500 via-pink-500 to-purple-500">Sunrise Splash</option>
+            <option value="bg-gradient-to-r from-blue-700 via-teal-500 to-cyan-500">Ocean Depths</option>
+            <option value="bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-600">Twilight Magic</option>
+            <option value="bg-gradient-to-r from-green-500 via-lime-500 to-cyan-400">Tropical Paradise</option>
+            <option value="bg-gradient-to-r from-pink-300 via-purple-300 to-blue-300">Cotton Candy Dream</option>
+            <option value="bg-gradient-to-r from-green-400 via-blue-600 to-purple-700">Aurora Whispers</option>
+            <option value="bg-gradient-to-r from-orange-500 via-red-500 to-pink-600">Sunset Serenade</option>
+            <option value="bg-gradient-to-t from-pink-600 via-purple-700 to-indigo-800">Starry Night</option>
+            <option value="bg-gradient-to-br from-yellow-300 via-orange-400 to-red-600">Citrus Burst</option>
+            <option value="bg-gradient-to-bl from-lime-400 via-emerald-500 to-teal-600">Forest Canopy</option>
+            <option value="bg-gradient-to-tl from-indigo-400 via-purple-500 to-pink-700">Mystic Twilight</option>
+            <option value="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500">Tranquil Waters</option>
+            <option value="bg-gradient-to-b from-fuchsia-500 via-purple-700 to-blue-900">Galactic Voyage</option>
+            <option value="bg-gradient-to-tr from-green-500 via-yellow-500 to-red-600">Autumn Breeze</option>
+            <option value="bg-gradient-to-t from-rose-500 via-pink-500 to-indigo-700">Lavender Fields</option>
+            <option value="bg-gradient-to-l from-yellow-400 via-lime-500 to-emerald-600">Meadow Sunrise</option>
+            <option value="bg-gradient-to-br from-purple-400 via-blue-500 to-teal-500">Cerulean Dream</option>
+            <option value="bg-gradient-to-bl from-red-500 via-amber-400 to-orange-600">Desert Glow</option>
+            <option value="bg-gradient-to-tl from-violet-600 via-indigo-700 to-blue-800">Nebula Gaze</option>
+
 
           </select>
           <div className="text-sm">
