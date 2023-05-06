@@ -164,18 +164,14 @@ function App() {
             <DownloadIcon className="w-4 h-4" />
           </button>
         </div>
-        <div id="markdownOutputContainer" className='flex items-center p-5'>
-        <div className={`p-4 bg-gray-100 rounded-lg ${gradient} ${previewWidth}`} >
+        <div id="markdownOutputContainer" className='flex bg-gray-100 items-center p-5'>
+        <div className={`p-4 shadow-lg rounded-lg ${gradient} ${previewWidth}`} >
           <div
-            className={`${alignment} shadow-lg text-white prose dark:prose`} dangerouslySetInnerHTML={{__html: renderContent(content)}}
+            className={`${alignment} text-white prose dark:prose`} dangerouslySetInnerHTML={{__html: renderContent(content)}}
           ></div>
         </div>
         </div>
       </div>
-
-
-
-
 
       </div>
     </div>
